@@ -1,0 +1,35 @@
+# Docker Bake configuration in docker-compose YAML format
+# This file defines targets for building x64 (amd64) and arm64 images
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      tags:
+        - docker-bake-example:latest
+        - docker-bake-example:multi-arch
+    image: docker-bake-example:latest
+
+  app-amd64:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+      tags:
+        - docker-bake-example:amd64
+    image: docker-bake-example:amd64
+
+  app-arm64:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/arm64
+      tags:
+        - docker-bake-example:arm64
+    image: docker-bake-example:arm64
