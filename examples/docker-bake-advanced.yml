@@ -15,7 +15,7 @@ services:
         - ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:multi-arch
       labels:
         org.opencontainers.image.title: "docker-bake-example"
-        org.opencontainers.image.source: "https://github.com/tetsuyainfra/docker-image-docker-bake"
+        org.opencontainers.image.source: "${VCS_URL:-https://github.com/your-org/your-repo}"
         org.opencontainers.image.description: "Example multi-architecture Docker image"
       args:
         BUILD_DATE: ${BUILD_DATE}
@@ -56,6 +56,7 @@ services:
 #   export TAG=v1.0.0
 #   export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 #   export VCS_REF=$(git rev-parse --short HEAD)
+#   export VCS_URL=https://github.com/your-org/your-repo
 #
 # Then build with:
 #   docker buildx bake -f docker-bake-advanced.yml app-advanced

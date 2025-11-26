@@ -27,7 +27,7 @@ jobs:
       - name: Validate Docker Bake configuration
         run: docker buildx bake --print
 
-      - name: Build multi-architecture images
+      - name: Print multi-architecture build configuration
         run: docker buildx bake --print app
 
       # Uncomment to build and load the native architecture image
