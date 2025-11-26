@@ -1,0 +1,10 @@
+# Build artifacts
+*.log
+
+# Docker build cache
+.docker/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
