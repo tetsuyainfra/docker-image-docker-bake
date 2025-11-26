@@ -42,7 +42,7 @@ docker buildx bake app-arm64
 
 Build all architecture-specific images:
 ```bash
-docker buildx bake all-archs
+docker buildx bake app-amd64 app-arm64
 ```
 
 ## Usage Examples
@@ -62,7 +62,7 @@ docker buildx bake app
 ```
 
 ### Build and Push to Registry
-To push multi-architecture images to a registry, modify the output in `docker-bake.hcl` or use command-line options:
+To push multi-architecture images to a registry, modify the configuration in `docker-compose.yml` or use command-line options:
 ```bash
 docker buildx bake app --push --set app.tags=your-registry/image:tag
 ```
