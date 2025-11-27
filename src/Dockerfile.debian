@@ -1,0 +1,34 @@
+# Multi-architecture Docker image example
+FROM debian:trixie-slim
+
+# Add labels for metadata
+# LABEL org.opencontainers.image.title="docker-bake-example"
+# LABEL org.opencontainers.image.description="Example multi-architecture image built with Docker Bake"
+
+# qemu-aarch64があるはずとかなんとか
+RUN env
+
+# Install basic utilities
+# acnge apk repositories to use HTTP temporarily to avoid SSL issue
+RUN set -eux; \
+    env ; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get full-upgrade -y; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            xz-utils ; \
+    DEBIAN_FRONTEND=noninteractive apt-get remove --purge --auto-remove -y; \
+    rm -rf /var/lib/apt/lists/* ; \
+    # Create manifest
+    mkdir -p /usr/share/rocks ; \
+    (dpkg-query -f '${binary:Package},${Version}\n' -W | sort) > /usr/share/rocks/packages.list
+
+# Show architecture information
+RUN echo "Building for architecture: $(uname -m)"
+
+# Create a simple script to show the architecture
+RUN echo '#!/bin/sh' > /usr/local/bin/show-arch && \
+    echo 'echo "Architecture: $(uname -m)"' >> /usr/local/bin/show-arch && \
+    echo 'echo "Platform: $(uname -s)"' >> /usr/local/bin/show-arch && \
+    chmod +x /usr/local/bin/show-arch
+
+CMD ["/usr/local/bin/show-arch"]

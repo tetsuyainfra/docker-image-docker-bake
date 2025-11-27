@@ -1,0 +1,35 @@
+# Multi-architecture Docker image example
+FROM alpine:3.22
+
+# Add labels for metadata
+# LABEL org.opencontainers.image.title="docker-bake-example"
+# LABEL org.opencontainers.image.description="Example multi-architecture image built with Docker Bake"
+
+# qemu-aarch64があるはずとかなんとか
+RUN env
+
+# Install basic utilities
+# acnge apk repositories to use HTTP temporarily to avoid SSL issue
+RUN sed -i 's/https:/http:/g' /etc/apk/repositories && \
+        cat /etc/apk/repositories && \
+        apk add -v --no-cache \
+        curl \
+        ca-certificates \
+        && \
+    sed -i 's/http:/https:/g' /etc/apk/repositories
+# RUN cat /etc/apk/repositories && \
+#         apk add --no-cache \
+#         curl \
+#         ca-certificates
+
+
+# Show architecture information
+RUN echo "Building for architecture: $(uname -m)"
+
+# Create a simple script to show the architecture
+RUN echo '#!/bin/sh' > /usr/local/bin/show-arch && \
+    echo 'echo "Architecture: $(uname -m)"' >> /usr/local/bin/show-arch && \
+    echo 'echo "Platform: $(uname -s)"' >> /usr/local/bin/show-arch && \
+    chmod +x /usr/local/bin/show-arch
+
+CMD ["/usr/local/bin/show-arch"]

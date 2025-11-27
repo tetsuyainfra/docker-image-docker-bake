@@ -1,0 +1,75 @@
+# Advanced Docker Bake Configuration Example (YAML format)
+# This shows additional features using docker-compose format
+
+services:
+  app:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      tags:
+        - ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:${TAG:-latest}
+        - ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:multi-arch
+      labels:
+        org.opencontainers.image.title: "docker-bake"
+        org.opencontainers.image.source: https://github.com/tetsuyainfra/docker-image-docker-bake
+  # Main multi-architecture target
+  # app-advanced:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     platforms:
+  #       - linux/amd64
+  #       - linux/arm64
+  #     tags:
+  #       - ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:${TAG:-latest}
+  #       - ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:multi-arch
+  #     labels:
+  #       org.opencontainers.image.title: "docker-bake-example"
+  #       org.opencontainers.image.source: "${VCS_URL:-https://github.com/your-org/your-repo}"
+  #       org.opencontainers.image.description: "Example multi-architecture Docker image"
+  #     args:
+  #       BUILD_DATE: ${BUILD_DATE}
+  #       VCS_REF: ${VCS_REF}
+  #   image: ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:${TAG:-latest}
+
+  # # Development build (single platform)
+  # app-dev:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     platforms:
+  #       - linux/amd64
+  #     tags:
+  #       - ${IMAGE_NAME:-docker-bake-example}:dev
+  #   image: ${IMAGE_NAME:-docker-bake-example}:dev
+
+  # # Production build with custom tags
+  # app-prod:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     platforms:
+  #       - linux/amd64
+  #       - linux/arm64
+  #     tags:
+  #       - ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:${TAG:-latest}
+  #       - ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:prod
+  #     labels:
+  #       org.opencontainers.image.title: "docker-bake-example-prod"
+  #       org.opencontainers.image.version: "${TAG:-latest}"
+  #   image: ${REGISTRY:-docker.io}/${IMAGE_NAME:-docker-bake-example}:prod
+
+# Usage:
+# Set environment variables before building:
+#   export REGISTRY=myregistry.io
+#   export IMAGE_NAME=myapp
+#   export TAG=v1.0.0
+#   export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+#   export VCS_REF=$(git rev-parse --short HEAD)
+#   export VCS_URL=https://github.com/your-org/your-repo
+#
+# Then build with:
+#   docker buildx bake -f docker-bake-advanced.yml app-advanced
